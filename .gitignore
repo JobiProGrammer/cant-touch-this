@@ -43,7 +43,8 @@
 cmake-build-*/
 
 # Mongo Explorer plugin
-.idea/**/mongoSettings.xml
+/**/.idea/**/mongoSettings.xml
+
 
 # File-based project format
 *.iws
@@ -52,13 +53,13 @@ cmake-build-*/
 out/
 
 # mpeltonen/sbt-idea plugin
-.idea_modules/
+/**/.idea_modules/
 
 # JIRA plugin
 atlassian-ide-plugin.xml
 
 # Cursive Clojure plugin
-.idea/replstate.xml
+/**/.idea/replstate.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
@@ -67,10 +68,10 @@ crashlytics-build.properties
 fabric.properties
 
 # Editor-based Rest Client
-.idea/httpRequests
+/**/.idea/httpRequests
 
 # Android studio 3.1+ serialized cache file
-.idea/caches/build_file_checksums.ser
+/**/.idea/caches/build_file_checksums.ser
 
 ### PyCharm Patch ###
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
@@ -81,14 +82,16 @@ fabric.properties
 # *.ipr
 
 # Sonarlint plugin
-.idea/**/sonarlint/
+/**/.idea/**/sonarlint/
 
 # SonarQube Plugin
-.idea/**/sonarIssues.xml
+/**/.idea/**/sonarIssues.xml
 
 # Markdown Navigator plugin
-.idea/**/markdown-navigator.xml
-.idea/**/markdown-navigator/
+/**/.idea/**/markdown-navigator.xml
+/**/.idea/**/markdown-navigator/
 
 # End of https://www.gitignore.io/api/pycharm
 venv/
+/**/venv*
+/**/__pycache__
