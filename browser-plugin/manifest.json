@@ -1,0 +1,20 @@
+ {
+
+    "manifest_version": 2,
+    "name": "Can't Touch This",
+    "version": "1.0",
+    
+    "description": "Can't Touch This Plugin for Gitlab",
+
+    "icons": {
+        "48": "icons/border-48.png"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://gitlab.com/*", "*://gitlab.lrz.de/*"],
+            "js": ["gitlab-frontend.js"]
+        }
+    ]
+
+}
