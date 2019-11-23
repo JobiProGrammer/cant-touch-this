@@ -1,3 +1,10 @@
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+}
+
 // Infer current project directory from browser URL
 function get_curr_browser_dir() {
     var url = window.location.pathname;  // e.g. /aDogCalledSpot/cant-touch-this/tree/master/your/path/here.txt
@@ -73,10 +80,20 @@ function place_person_icons(files) {
         num.innerHTML = files[filename_texts[i].title];
         // Person icon
         var divr = document.createElement("div");
+        divr.id = uuidv4();
+        person_icon_ids.push(divr.id);
         divr.style = "float:right; display: inline-block";
         filename_boxes[i].append(divr);
         divr.append(icon.cloneNode(), num);
     }
+}
+
+function remove_person_icons() {
+    old_person_icon_ids.forEach(id => {
+        var el = document.getElementById(id);
+        console.log(el);
+        el.parentNode.removeChild(el);
+    });
 }
 
 // Place fading warning banner on top of files
@@ -121,23 +138,23 @@ function refresh_files() {
     }).then(res => res.json()).then(data => {
         delete data.project;
         files = data;
-        console.log(files);
+        console.log("GET result:", files);
     })
     .catch(err => console.log("Fetch error: ", err));
-    update_frontend();
+    update_frontend_dir(files);
+
+    // Schedule function again after 5s
     setTimeout(refresh_files, 5000);
 }
 
-// Place all UI elements depending on current URL
-function update_frontend() {
-    if (!is_url_file()) {
-        place_person_icons(files);
-    } else if (get_curr_browser_dir() in files){
-        // Highlight lines
-        setTimeout(place_line_edits, 250, changes);
-        // Display warning
-        place_warning_banner(changes);
-    }
+// Refresh the view of the file explorer
+function update_frontend_dir(files) {
+    old_person_icon_ids = person_icon_ids;
+    person_icon_ids = [];
+    console.log("Icons to remove:", old_person_icon_ids);
+    remove_person_icons();
+    place_person_icons(files);
+    console.log("Active person icons:", person_icon_ids);
 }
 
 // ========== MAIN ==========
@@ -149,5 +166,14 @@ document.head.append(link);
 
 var files = {};
 var changes = [];
+var person_icon_ids = [];
+var old_person_icon_ids = [];
 
-refresh_files()
+if (!is_url_file()) {
+    refresh_files();
+} else if (get_curr_browser_dir() in files){
+    // Highlight lines
+    setTimeout(place_line_edits, 250, changes);
+    // Display warning
+    place_warning_banner(changes);
+}
