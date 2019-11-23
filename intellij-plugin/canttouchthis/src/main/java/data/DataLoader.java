@@ -4,8 +4,10 @@ import data.model.File;
 
 public class DataLoader {
     private DataProvider provider;
+    private Config config;
 
-    public DataLoader() {
+    public DataLoader(Config config) {
+        this.config = config;
         provider = isOnline() ? new WebDataProvider() : new TestDataProvider();
         provider.loadAll();
     }
