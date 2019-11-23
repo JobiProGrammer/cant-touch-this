@@ -37,8 +37,6 @@ for diff in repo.diff('master'):
     if len(lines) != 0:
         diffs.append((path, lines))
 
-print(diffs)
-
 # Get name
 name = repo.config['user.email']
 
