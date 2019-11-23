@@ -8,9 +8,7 @@ public class DataLoader {
 
     public DataLoader(Config config) {
         this.config = config;
-        provider = isOnline() ? new WebDataProvider() : new TestDataProvider();
-        provider.loadAll();
-
+        provider = isOnline() ? new WebDataProvider(this.config) : new TestDataProvider();
     }
 
     private boolean isOnline() {

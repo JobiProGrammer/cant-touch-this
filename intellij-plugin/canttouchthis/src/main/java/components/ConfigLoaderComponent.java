@@ -2,11 +2,10 @@ package components;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import data.Config;
 import data.DataLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import data.Config;
 
 // TODO set to reloadable and handle changes
 @State(name = "Config", reloadable = false)
