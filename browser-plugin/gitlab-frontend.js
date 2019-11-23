@@ -73,6 +73,10 @@ let files = {
     "backend/main/admin.py": 1
 }
 
+function fadeOutEffect() {
+    var fadeTarget = document.getElementById("target");
+}
+
 if (!is_url_file()) {
     place_person_icons(files);
 } else if (get_curr_browser_dir() in files){
@@ -80,6 +84,7 @@ if (!is_url_file()) {
     let div = document.createElement("div");
     let span = document.createElement("span");
     div.className = "banner";
+    div.id = "fader";
     span.className = "banner_text";
     document.body.prepend(div);
     div.append(span);
