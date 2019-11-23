@@ -95,8 +95,10 @@ function place_warning_banner(changes) {
 // Place line highlights etc.
 function place_line_edits(changes) {
     var unq_changes = [...new Set(changes.map(c => c["lines"]).flat())];
-    for (change of changes) {
-        
+    for (change of unq_changes) {
+        let line_con = document.getElementById("LC" + change);
+        line_con.display = "block";
+        line_con.style.backgroundColor = "#e3ceee";
     }
 }
 
@@ -135,8 +137,9 @@ if (!is_url_file()) {
         {"email": "sand@l.en", "lines": [0]},
         {"email": "sel@e.na", "lines": [1,2]}
     ];
+    // Highlight lines
+    setTimeout(place_line_edits, 250, changes);
+    // place_line_edits(changes);
     // Display warning
     place_warning_banner(changes);
-    // Highlight lines
-    place_line_edits(changes);
 }
