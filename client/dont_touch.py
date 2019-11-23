@@ -2,6 +2,8 @@
 
 import pygit2
 import re
+import requests
+from time import sleep
 
 
 def get_function_name_from_line(path, lineno):
@@ -20,20 +22,8 @@ def get_function_name_from_line(path, lineno):
         raise RuntimeError("Indented but not in function")
 
 
-# Stuff for diffs
+# Initialize repo
 repo = pygit2.Repository('.')
-diffs = []
-for diff in repo.diff('master'):
-    path = diff.delta.old_file.path
-    lines = []
-    for hunk in diff.hunks:
-        for line in hunk.lines:
-            # Only check deleted lines
-            if line.new_lineno == -1:
-                lines.append(line.old_lineno)
-    diffs.append((path, lines))
-
-print(diffs)
 
 # Get name
 name = repo.config['user.email']
@@ -42,3 +32,32 @@ name = repo.config['user.email']
 remote = repo.branches['master'].upstream.remote_name
 url = repo.remotes[remote].url
 
+# Send to server
+server = 'PLACEHOLDER'
+
+# Stuff for diffs
+while True:
+    diffs = []
+    for diff in repo.diff('master'):
+        path = diff.delta.old_file.path
+        lines = []
+        for hunk in diff.hunks:
+            for line in hunk.lines:
+                # Only check deleted lines
+                if line.new_lineno == -1:
+                    lines.append(line.old_lineno)
+
+        # Ignore files which only have added lines
+        if len(lines) != 0:
+            diffs.append((path, lines))
+
+    for (path, changes) in diffs:
+        payload = {
+            'path': path,
+            'project': url,
+            'email': name,
+            'change': changes
+        }
+        print(payload)
+        requests.post(server, payload)
+    sleep(10)
