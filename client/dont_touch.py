@@ -39,10 +39,6 @@ def main(path):
                     if line.new_lineno == -1:
                         lines.append(line.old_lineno)
 
-            # Ignore files which only have added lines
-            if len(lines) != 0:
-                diffs.append((path, lines))
-
         for (path, changes) in diffs:
             payload = {
                 'path': path,
