@@ -3,10 +3,19 @@ function get_curr_browser_dir() {
     var url = window.location.pathname  // e.g. /aDogCalledSpot/cant-touch-this/tree/master/your/path/here.txt
     var split = url.split("/").filter(sub => sub !== "");
     if (split.length <= 4) {
-        return ".";      // Root directory
+        return "";      // Root directory
     } else {
         return split.slice(4).join("/");
     }
+}
+
+// Filter out all filepaths that are not relevant for the current page
+// and format them to what is shown on gitlab
+function filter_to_scope (filenames) {
+    var prefix = get_curr_browser_dir();
+    console.log("Current dir:", prefix);
+    return filenames.filter(n => n.startsWith(prefix)).map(s => s.substring(prefix.length).split("/")
+        .filter(s => s !== "")[0]);
 }
 
 // Place person icons next to all files on the current page with the file names specified
@@ -19,6 +28,9 @@ function place_person_icons(filenames) {
     var filename_texts = Array.from(document.querySelectorAll("#tree-slider > tbody > tr > td.tree-item-file-name > a"))
     .filter(el => filenames.includes(el.title));
     var filename_boxes = filename_texts.map(el => el.parentElement);
+    if (filename_texts.length != filename_boxes.length) {
+        console.log("LENGTH MISMATCH:", filename_boxes.length, filename_texts.length);
+    }
     // Arrange and insert elements
     for (i=0; i<filename_boxes.length; i++) {
         var divr = document.createElement("div");
@@ -29,5 +41,4 @@ function place_person_icons(filenames) {
 }
 
 // MAIN
-place_person_icons([".idea", ".gitignore"]);
-console.log(get_curr_browser_dir());
+place_person_icons(filter_to_scope([".gitignore", "browser-plugin/manifest.json", "browser-plugin/icons/person.png"]));
