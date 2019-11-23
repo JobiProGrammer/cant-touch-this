@@ -1,9 +1,9 @@
 package data.model;
 
 public class Project {
-    File file;
+    File[] file;
 
-    public Project(File file) {
+    public Project(File[] file) {
         this.file = file;
     }
 
