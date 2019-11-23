@@ -104,31 +104,19 @@ function place_line_edits(changes) {
 
 // Poll for new changes
 function refresh_files() {
-    var url = new URL("http://52.236.180.203:8080/api/change/"),
+    var url = new URL("http://52.236.180.203:8080/api/file/"),
         params = {"project":"git@gitlab.lrz.de:aDogCalledSpot/cant-touch-this.git"}
-    // var url = new URL("https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits");
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    console.log(url);
 
-    function status(response) {
-        if (response.status >= 200 && response.status < 300) {
-            return Promise.resolve(response)
+    fetch(url).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            return Promise.resolve(res);
         } else {
-            return Promise.reject(new Error(response.statusText))
-      }
-    }
+            return Promise.reject(new Error(res.statusText));
+        }
+    }).then(res => res.json()).then(data => console.log(data))
+    .catch(err => console.log("Fetch error: ", err));
 
-    function json(response) {
-        return response.json()
-    }
-
-    fetch(url).then(status).then(json).then(function(data) {
-        console.log(data)
-    })
-    .catch(function(err) {
-        console.log("Fetch error: ", err)
-    });
-    // files = Object.fromEntries(entries);
     setTimeout(refresh_files, 5000);
 }
 
@@ -148,7 +136,7 @@ let files = {
     "backend/main/admin.py": 1
 }
 
-// refresh_files()https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts;
+refresh_files()
 
 if (!is_url_file()) {
     place_person_icons(files);
@@ -160,7 +148,6 @@ if (!is_url_file()) {
         {"email": "sand@l.en", "lines": [0]},
         {"email": "sel@e.na", "lines": [1,2]}
     ];
-    refresh_files();
     // Highlight lines
     setTimeout(place_line_edits, 250, changes);
     // place_line_edits(changes);
