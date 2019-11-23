@@ -58,30 +58,12 @@ function place_person_icons(files) {
     }
 }
 
-// MAIN
-var style = document.createElement('style');
-style.innerHTML = `
-    .banner {
-        position: fixed;
-        display:flex;
-        justify-content: center;
-        align-items: center;
-        top: 5%;
-        left: 0;
-        width: 100%;
-        height: 8%;
-        background-color: rgba(231,94,64,0.90);
-        cursor: pointer;
-        pointer-events: none;
-        z-index: 2
-    }
-    .banner_text {
-        line-height: normal;
-        color: white;
-        font-size: 15px;
-    }
-`;
-document.head.appendChild(style);
+// ========== MAIN ==========
+// Load styles
+var link = document.createElement("link");
+link.rel = "stylesheet";
+link.href = browser.runtime.getURL("style.css");
+document.head.append(link);
 
 let files = {
     ".gitignore": 1,
