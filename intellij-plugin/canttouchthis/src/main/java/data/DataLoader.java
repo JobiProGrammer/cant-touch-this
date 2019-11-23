@@ -10,7 +10,7 @@ public class DataLoader {
         this.config = config;
         provider = isOnline() ? new WebDataProvider() : new TestDataProvider();
         provider.loadAll();
-        
+
     }
 
     private boolean isOnline() {

@@ -3,6 +3,7 @@ package components;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import data.DataLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import data.Config;
@@ -14,6 +15,8 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
     @State(name = "config")
     public Config state;
 
+    public DataLoader dataLoader;
+
     @Nullable
     @Override
     public Config getState() {
@@ -24,6 +27,7 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
     public void loadState(@NotNull Config state) {
         System.out.println("Config loaded with values: " + state.user + ", " + state.host);
         this.state = state;
+        this.dataLoader= new DataLoader(state);
     }
 
     @Override
