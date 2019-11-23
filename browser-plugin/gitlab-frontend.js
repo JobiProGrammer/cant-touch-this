@@ -1,12 +1,18 @@
 // Infer current project directory from browser URL
 function get_curr_browser_dir() {
-    var url = window.location.pathname  // e.g. /aDogCalledSpot/cant-touch-this/tree/master/your/path/here.txt
+    var url = window.location.pathname;  // e.g. /aDogCalledSpot/cant-touch-this/tree/master/your/path/here.txt
     var split = url.split("/").filter(sub => sub !== "");
     if (split.length <= 4) {
         return "";      // Root directory
     } else {
         return split.slice(4).join("/");
     }
+}
+
+// Check if current URL is a file
+function is_url_file() {
+    var url = window.location.pathname;
+    return (["blob", "raw"].includes(url.split("/").filter(s => s !== "")[2]));
 }
 
 // Filter out all filepaths that are not relevant for the current page
@@ -53,8 +59,22 @@ function place_person_icons(files) {
 }
 
 // MAIN
-place_person_icons({
+let files = {
     ".gitignore": 1,
     "browser-plugin/manifest.json": 2,
-    "browser-plugin/icons/person.png": 1
-});
+    "browser-plugin/icons/person.png": 1,
+    "backend/backend/settings.py": 3,
+    "backend/main/admin.py": 1
+}
+
+if (!is_url_file()) {
+    place_person_icons(files);
+} else if (get_curr_browser_dir() in files){
+    // Display warning
+    let key = get_curr_browser_dir();
+    if (files[key] == 1) {
+        alert("This file is currently being edited by 1 other user.\nProceed with care!");
+    } else {
+        alert("This file is currently being edited by " + files[get_curr_browser_dir()] + " other users.\nProceed with care!");
+    }
+}
