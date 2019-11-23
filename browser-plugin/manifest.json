@@ -10,7 +10,7 @@
         "48": "icons/border-48.png"
     },
 
-    "web_accessible_resources": ["icons/person.png"],
+    "web_accessible_resources": ["icons/person.png", "style.css"],
 
     "content_scripts": [
         {
