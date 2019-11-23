@@ -21,6 +21,19 @@ def get_function_name_from_line(path, lineno):
         raise RuntimeError("Indented but not in function")
 
 
+# Initialize repo
+repo = pygit2.Repository('.')
+
+# Get name
+name = repo.config['user.email']
+
+# Get project name
+remote = repo.branches['master'].upstream.remote_name
+url = repo.remotes[remote].url
+
+# Send to server
+server = 'PLACEHOLDER'
+
 # Stuff for diffs
 repo = pygit2.Repository('.')
 diffs = []
