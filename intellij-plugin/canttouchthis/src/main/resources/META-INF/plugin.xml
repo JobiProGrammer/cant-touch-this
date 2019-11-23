@@ -19,12 +19,22 @@
     </extensions>
 
     <actions>
-<!--        <group id="MyPlugin.SampleMenu" text="Help" description="Greeting menu">-->
-<!--            <add-to-group group-id="MainMenu" anchor="last"/>-->
-            <action id="Myplugin.Textboxes" class="actions.HelloAction" text="Greet Me!" description="Says hello">
-                <add-to-group group-id="HelpMenu" anchor="first"/>
-            </action>
-<!--        </group>-->
+        <!--        <group id="MyPlugin.SampleMenu" text="Help" description="Greeting menu">-->
+        <!--            <add-to-group group-id="MainMenu" anchor="last"/>-->
+        <action class="actions.HelloAction"
+                id="canttouchthis.greet"
+                text="Greet Me!"
+                description="Says hello">
+            <add-to-group group-id="HelpMenu" anchor="first"/>
+        </action>
+        <!--        </group>-->
+
+        <action class="actions.HighlightAction"
+                id="canttouchthis.highlight"
+                text="Highlight Live Edits"
+                description="Highlight other People's Edits in Real Time">
+            <add-to-group group-id="ViewMenu" anchor="first"/>
+        </action>
     </actions>
 
     <!-- Plugin's project components -->
@@ -37,7 +47,7 @@
                  Note that the <option> element is used only if the component
                  implements the JDOMExternalizable interface. Otherwise, the
                  use of the <option> element takes no effect.  -->
-            <option name="workspace" value="true" />
+            <option name="workspace" value="true"/>
             <!-- If the "loadForDefaultProject" tag is present, the project component is instantiated also for the default project. -->
             <loadForDefaultProject/>
         </component>

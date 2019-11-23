@@ -7,11 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import data.Config;
 
-@State(name = "Config", reloadable = true)
+// TODO set to reloadable and handle changes
+@State(name = "Config", reloadable = false)
 public class ConfigLoaderComponent implements PersistentStateComponent<data.Config> {
     @Nullable
     @State(name = "config")
-    private Config state;
+    public Config state;
 
     @Nullable
     @Override
