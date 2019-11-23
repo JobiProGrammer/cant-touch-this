@@ -1,0 +1,29 @@
+<idea-plugin>
+    <id>tasc.canttouchthis</id>
+    <name>Can't Stop This</name>
+    <vendor email="saman.miran@tum.de" url="https://devpost.com/software/can-ttouchthis">TASC</vendor>
+
+    <description><![CDATA[
+    See what your teammates are working on in real time!<br>
+    <em>WIP</em>
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+<!--        <group id="MyPlugin.SampleMenu" text="Help" description="Greeting menu">-->
+<!--            <add-to-group group-id="MainMenu" anchor="last"/>-->
+            <action id="Myplugin.Textboxes" class="actions.HelloAction" text="Greet Me!" description="Says hello">
+                <add-to-group group-id="HelpMenu" anchor="first"/>
+            </action>
+<!--        </group>-->
+    </actions>
+</idea-plugin>
