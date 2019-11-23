@@ -33,6 +33,27 @@ function filter_to_scope (files) {
     return filtered_dict;
 }
 
+// Changes list to listing of emails, e.g. "e@ma.il, sec@on.d and 2 others"
+function get_editors(changes, max_explicit_len=2) {
+    var editors = [];
+    for (var i=0; i<max_explicit_len; i++) {
+        if (i >= changes.length) {
+          break;
+        };
+        editors.push(changes[i]["email"]);
+        if ((changes.length <= max_explicit_len && i == changes.length-2)
+        || (changes.length > max_explicit_len && i == max_explicit_len-1)) {
+            editors.push(" and ");
+        } else if (i < Math.min(changes.length-1, max_explicit_len)) {
+            editors.push(", ");
+        }
+    }
+    if (changes.length > max_explicit_len) {
+        editors.push((changes.length-max_explicit_len) + " other")
+    }
+    return editors.join("");
+}
+
 // Place person icons next to all files on the current page with the file names specified
 function place_person_icons(files) {
     files = filter_to_scope(files);
@@ -58,29 +79,8 @@ function place_person_icons(files) {
     }
 }
 
-// ========== MAIN ==========
-// Load styles
-var link = document.createElement("link");
-link.rel = "stylesheet";
-link.href = browser.runtime.getURL("style.css");
-document.head.append(link);
-
-let files = {
-    ".gitignore": 1,
-    "browser-plugin/manifest.json": 2,
-    "browser-plugin/icons/person.png": 1,
-    "backend/backend/settings.py": 3,
-    "backend/main/admin.py": 1
-}
-
-function fadeOutEffect() {
-    var fadeTarget = document.getElementById("target");
-}
-
-if (!is_url_file()) {
-    place_person_icons(files);
-} else if (get_curr_browser_dir() in files){
-    // Display warning
+// Place fading warning banner on top of files
+function place_warning_banner(changes) {
     let div = document.createElement("div");
     let span = document.createElement("span");
     div.className = "banner";
@@ -89,9 +89,54 @@ if (!is_url_file()) {
     document.body.prepend(div);
     div.append(span);
     let key = get_curr_browser_dir();
-    if (files[key] == 1) {
-        span.innerText = "This file is currently being edited by 1 other user.\nProceed with care!";
-    } else {
-        span.innerText = "This file is currently being edited by " + files[key] + " other users.\nProceed with care!";
+    span.innerText = "This file is currently being edited by " + get_editors(changes) + ".\nProceed with care!";
+}
+
+// Place line highlights etc.
+function place_line_edits(changes) {
+    var unq_changes = [...new Set(changes.map(c => c["lines"]).flat())];
+    for (change of changes) {
+        
     }
+}
+
+// Poll for new changes
+function refresh_files() {
+    // TODO: get changes and trigger actions
+    // files = Object.fromEntries(entries);
+    setTimeout(refresh_files, 5000);
+}
+
+// ========== MAIN ==========
+// Load styles
+var link = document.createElement("link");
+link.rel = "stylesheet";
+link.href = browser.runtime.getURL("style.css");
+document.head.append(link);
+
+// TODO: Get real files
+let files = {
+    ".gitignore": 1,
+    "browser-plugin/manifest.json": 2,
+    "browser-plugin/icons/person.png": 1,
+    "backend/backend/settings.py": 3,
+    "backend/main/admin.py": 1
+}
+
+// refresh_files();
+
+if (!is_url_file()) {
+    place_person_icons(files);
+} else if (get_curr_browser_dir() in files){
+    // TODO: Get real changes
+    let changes = [
+        {"email": "someone@web.de", "lines": [3,4,5]},
+        {"email": "mea@cul.pa", "lines": [5,8,9]},
+        {"email": "sand@l.en", "lines": [0]},
+        {"email": "sel@e.na", "lines": [1,2]}
+    ];
+    // Display warning
+    place_warning_banner(changes);
+    // Highlight lines
+    place_line_edits(changes);
 }
