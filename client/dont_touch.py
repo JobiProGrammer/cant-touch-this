@@ -2,6 +2,7 @@
 
 import pygit2
 import re
+import requests
 
 
 def get_function_name_from_line(path, lineno):
@@ -45,3 +46,14 @@ name = repo.config['user.email']
 remote = repo.branches['master'].upstream.remote_name
 url = repo.remotes[remote].url
 
+# Send to server
+server = 'PLACEHOLDER'
+for (path, changes) in diffs:
+    payload = {
+        'path': path,
+        'project': url,
+        'email': name,
+        'change': changes
+    }
+    print(payload)
+    requests.post(server, payload)
