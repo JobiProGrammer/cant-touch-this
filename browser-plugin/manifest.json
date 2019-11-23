@@ -10,6 +10,8 @@
         "48": "icons/border-48.png"
     },
 
+    "permissions": ["http://localhost/*"],
+
     "web_accessible_resources": ["icons/person.png", "style.css"],
 
     "content_scripts": [
