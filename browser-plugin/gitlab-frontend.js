@@ -62,23 +62,23 @@ function place_person_icons(files) {
 var style = document.createElement('style');
 style.innerHTML = `
     .banner {
-        display: table-cell;
         position: fixed;
+        display:flex;
+        justify-content: center;
+        align-items: center;
         top: 5%;
         left: 0;
         width: 100%;
-        height:10%;
-        text-align: center;
-        background-color: rgba(231,94,64,0.85);
+        height: 8%;
+        background-color: rgba(231,94,64,0.90);
         cursor: pointer;
         pointer-events: none;
         z-index: 2
     }
     .banner_text {
-        display: inline-block;
-        vertical-align: middle;
         line-height: normal;
         color: white;
+        font-size: 15px;
     }
 `;
 document.head.appendChild(style);
@@ -105,6 +105,6 @@ if (!is_url_file()) {
     if (files[key] == 1) {
         span.innerText = "This file is currently being edited by 1 other user.\nProceed with care!";
     } else {
-        span.innerText = "This file is currently being edited by " + files[get_curr_browser_dir()] + " other users.\nProceed with care!";
+        span.innerText = "This file is currently being edited by " + files[key] + " other users.\nProceed with care!";
     }
 }
