@@ -10,6 +10,8 @@
         "48": "icons/border-48.png"
     },
 
+    "web_accessible_resources": ["icons/person.png"],
+
     "content_scripts": [
         {
             "matches": ["*://gitlab.com/*", "*://gitlab.lrz.de/*"],
