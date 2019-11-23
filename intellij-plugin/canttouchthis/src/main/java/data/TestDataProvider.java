@@ -15,9 +15,9 @@ public class TestDataProvider implements DataProvider {
     public File get(String file) {
         return new File(file,
                 new Change[]{
-                        new Change(new Line[]{new Line(0), new Line(1)}, new User("1@test.com")),
-                        new Change(new Line[]{new Line(4), new Line(5)}, new User("2@test.com")),
-                        new Change(new Line[]{new Line(3), new Line(7)}, new User("3@test.com"))
+                        new Change(new Line[]{new Line(1), new Line(3)}, new User("1@test.com")),
+                        new Change(new Line[]{new Line(4), new Line(9)}, new User("2@test.com")),
+                        new Change(new Line[]{new Line(13), new Line(13)}, new User("3@test.com"))
                 });
     }
 }

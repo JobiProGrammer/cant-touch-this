@@ -19,21 +19,11 @@
     </extensions>
 
     <actions>
-        <!--        <group id="MyPlugin.SampleMenu" text="Help" description="Greeting menu">-->
-        <!--            <add-to-group group-id="MainMenu" anchor="last"/>-->
         <action class="actions.HelloAction"
                 id="canttouchthis.greet"
                 text="Greet Me!"
                 description="Says hello">
             <add-to-group group-id="HelpMenu" anchor="first"/>
-        </action>
-        <!--        </group>-->
-
-        <action class="actions.HighlightAction"
-                id="canttouchthis.highlight"
-                text="Highlight Live Edits"
-                description="Highlight other People's Edits in Real Time">
-            <add-to-group group-id="ViewMenu" anchor="first"/>
         </action>
     </actions>
 
