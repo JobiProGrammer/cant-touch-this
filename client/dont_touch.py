@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-from pygit2 import Repository
+import pygit2
 import re
 
 
@@ -21,11 +21,18 @@ def get_function_name_from_line(path, lineno):
 
 
 # Stuff for diffs
-repo = Repository('.')
-for diff in repo.diff('HEAD'):
+repo = pygit2.Repository('.')
+diffs = []
+for diff in repo.diff('master'):
+    path = diff.delta.old_file.path
+    lines = []
     for hunk in diff.hunks:
         for line in hunk.lines:
-            print(line.content)
+            if line.new_lineno == -1:
+                lines.append(line.old_lineno)
+    diffs.append((path, lines))
+
+print(diffs)
 
 # Get name
 name = repo.config['user.email']
