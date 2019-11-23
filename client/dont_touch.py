@@ -33,7 +33,7 @@ remote = repo.branches['master'].upstream.remote_name
 url = repo.remotes[remote].url
 
 # Send to server
-server = 'PLACEHOLDER'
+server = 'http://localhost:8000/api/change/'
 
 # Stuff for diffs
 while True:
@@ -56,7 +56,7 @@ while True:
             'path': path,
             'project': url,
             'email': name,
-            'change': changes
+            'change': str(changes)
         }
         print(payload)
         requests.post(server, payload)
