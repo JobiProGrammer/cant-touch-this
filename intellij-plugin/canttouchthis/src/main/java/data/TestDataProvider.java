@@ -6,10 +6,6 @@ import data.model.Line;
 import data.model.User;
 
 public class TestDataProvider implements DataProvider {
-    @Override
-    public void loadAll() {
-
-    }
 
     @Override
     public File get(String file) {
