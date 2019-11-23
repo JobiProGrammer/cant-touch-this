@@ -63,21 +63,21 @@ function get_editors(changes, max_explicit_len=2) {
 
 // Place person icons next to all files on the current page with the file names specified
 function place_person_icons(files) {
-    files = filter_to_scope(files);
+    let ffiles = filter_to_scope(files);
     // Create icon
     var icon = document.createElement("img");
     icon.src = browser.runtime.getURL("icons/person.png");
     icon.style = "text-align:right; height:1em; width:auto";
     // Find respective table cells
     var filename_texts = Array.from(document.querySelectorAll("#tree-slider > tbody > tr > td.tree-item-file-name > a"))
-    .filter(el => Object.keys(files).includes(el.title));
+    .filter(el => Object.keys(ffiles).includes(el.title));
     var filename_boxes = filename_texts.map(el => el.parentElement);
     // Arrange and insert elements
     for (i=0; i<filename_boxes.length; i++) {
         // Number of people working
         var num = document.createElement("span");
         num.className = "badge badge-pill count issue-counter";
-        num.innerHTML = files[filename_texts[i].title];
+        num.innerHTML = ffiles[filename_texts[i].title];
         // Person icon
         var divr = document.createElement("div");
         divr.id = uuidv4();
@@ -91,7 +91,6 @@ function place_person_icons(files) {
 function remove_person_icons() {
     old_person_icon_ids.forEach(id => {
         var el = document.getElementById(id);
-        console.log(el);
         el.parentNode.removeChild(el);
     });
 }
@@ -138,31 +137,36 @@ function refresh_files() {
     }).then(res => res.json()).then(data => {
         delete data.project;
         files = data;
-        console.log("GET result:", files);
+        // console.log("GET result:", files);
     })
     .catch(err => console.log("Fetch error: ", err));
     update_frontend_dir(files);
 
-    // Schedule function again after 5s
-    setTimeout(refresh_files, 5000);
+    // Schedule function again after timeout
+    setTimeout(refresh_files, 500);
 }
 
-// Refresh the view of the file explorer
+// Refresh the view of the directory explorer
 function update_frontend_dir(files) {
     old_person_icon_ids = person_icon_ids;
     person_icon_ids = [];
-    console.log("Icons to remove:", old_person_icon_ids);
     remove_person_icons();
     place_person_icons(files);
-    console.log("Active person icons:", person_icon_ids);
+}
+
+// Refresh the view of the file content viewer
+function update_frontend_file(changes) {
+
 }
 
 // ========== MAIN ==========
 // Load styles
-var link = document.createElement("link");
-link.rel = "stylesheet";
-link.href = browser.runtime.getURL("style.css");
-document.head.append(link);
+{
+    let link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = browser.runtime.getURL("style.css");
+    document.head.append(link);
+}
 
 var files = {};
 var changes = [];
