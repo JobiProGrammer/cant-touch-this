@@ -1,10 +1,15 @@
-// Red border for debugging
-document.body.style.border = "5px solid red";
+// Infer current project directory from browser URL
+function get_curr_browser_dir() {
+    var url = window.location.pathname  // e.g. /aDogCalledSpot/cant-touch-this/tree/master/your/path/here.txt
+    var split = url.split("/").filter(sub => sub !== "");
+    if (split.length <= 4) {
+        return ".";      // Root directory
+    } else {
+        return split.slice(4).join("/");
+    }
+}
 
-// Random debug button
-var button = document.createElement("button");
-button.innerHTML = "Press me";
-
+// Place person icons next to all files on the current page with the file names specified
 function place_person_icons(filenames) {
     // Create icon
     var icon = document.createElement("img");
@@ -23,5 +28,6 @@ function place_person_icons(filenames) {
     }
 }
 
-// Put person icon next to file object where text is ".idea"
+// MAIN
 place_person_icons([".idea", ".gitignore"]);
+console.log(get_curr_browser_dir());
