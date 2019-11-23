@@ -31,7 +31,10 @@ for diff in repo.diff('master'):
             # Only check deleted lines
             if line.new_lineno == -1:
                 lines.append(line.old_lineno)
-    diffs.append((path, lines))
+
+    # Ignore files which only have added lines
+    if len(lines) != 0:
+        diffs.append((path, lines))
 
 print(diffs)
 
