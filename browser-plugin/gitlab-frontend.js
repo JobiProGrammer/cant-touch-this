@@ -102,10 +102,14 @@ function place_line_edits(changes) {
     }
 }
 
-// Poll for new changes
+// Poll for new files
 function refresh_files() {
+    // Get list of file changes
     var url = new URL("http://52.236.180.203:8080/api/file/"),
-        params = {"project":"git@gitlab.lrz.de:aDogCalledSpot/cant-touch-this.git"}
+        params = {
+            "project": "git@gitlab.lrz.de:aDogCalledSpot/cant-touch-this.git",
+            "dict": true
+        }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url).then(res => {
@@ -114,10 +118,26 @@ function refresh_files() {
         } else {
             return Promise.reject(new Error(res.statusText));
         }
-    }).then(res => res.json()).then(data => console.log(data))
+    }).then(res => res.json()).then(data => {
+        delete data.project;
+        files = data;
+        console.log(files);
+    })
     .catch(err => console.log("Fetch error: ", err));
-
+    update_frontend();
     setTimeout(refresh_files, 5000);
+}
+
+// Place all UI elements depending on current URL
+function update_frontend() {
+    if (!is_url_file()) {
+        place_person_icons(files);
+    } else if (get_curr_browser_dir() in files){
+        // Highlight lines
+        setTimeout(place_line_edits, 250, changes);
+        // Display warning
+        place_warning_banner(changes);
+    }
 }
 
 // ========== MAIN ==========
@@ -127,30 +147,7 @@ link.rel = "stylesheet";
 link.href = browser.runtime.getURL("style.css");
 document.head.append(link);
 
-// TODO: Get real files
-let files = {
-    ".gitignore": 1,
-    "browser-plugin/manifest.json": 2,
-    "browser-plugin/icons/person.png": 1,
-    "backend/backend/settings.py": 3,
-    "backend/main/admin.py": 1
-}
+var files = {};
+var changes = [];
 
 refresh_files()
-
-if (!is_url_file()) {
-    place_person_icons(files);
-} else if (get_curr_browser_dir() in files){
-    // TODO: Get real changes
-    let changes = [
-        {"email": "someone@web.de", "lines": [3,4,5]},
-        {"email": "mea@cul.pa", "lines": [5,8,9]},
-        {"email": "sand@l.en", "lines": [0]},
-        {"email": "sel@e.na", "lines": [1,2]}
-    ];
-    // Highlight lines
-    setTimeout(place_line_edits, 250, changes);
-    // place_line_edits(changes);
-    // Display warning
-    place_warning_banner(changes);
-}
