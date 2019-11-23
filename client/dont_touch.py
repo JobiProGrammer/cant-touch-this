@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/pythonasoenthuasoeunhe
 
 import pygit2
 import requests
@@ -18,14 +18,20 @@ name = repo.config['user.email']
 # Get project name
 remote = repo.branches['master'].upstream.remote_name
 url = repo.remotes[remote].url
+remote_head = repo.branches.remote[remote + '/HEAD']
 
 # Send to server
 server = 'http://{}:8080/api/change/'.format(SERVER)
+
+waitTime = 10
 
 
 @click.command()
 @click.option('--path', default=None, help='Path to the project root directory.')
 def main(path):
+    # Initialize with 60 so we always pull in the beginning
+    wait_counter = 60
+
     if path != None:
         os.chdir(path)
 
@@ -41,8 +47,15 @@ def main(path):
                     changed_by_me.append(entry['path'])
                     break
 
+        # Update refs
+
+        # Only fetch every minute
+        if wait_counter == 60:
+            os.system("git fetch " + remote)
+            wait_counter = 0
+
         diffs = []
-        for diff in repo.diff('master'):
+        for diff in repo.diff(remote_head):
             path = diff.delta.old_file.path
             lines = []
             for hunk in diff.hunks:
@@ -74,7 +87,8 @@ def main(path):
                 print(payload)
                 requests.post(server, payload)
 
-        sleep(10)
+        sleep(waitTime)
+        wait_counter += waitTime
 
 
 if __name__ == "__main__":
