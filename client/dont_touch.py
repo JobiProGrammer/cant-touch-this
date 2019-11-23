@@ -28,6 +28,7 @@ for diff in repo.diff('master'):
     lines = []
     for hunk in diff.hunks:
         for line in hunk.lines:
+            # Only check deleted lines
             if line.new_lineno == -1:
                 lines.append(line.old_lineno)
     diffs.append((path, lines))
@@ -36,4 +37,8 @@ print(diffs)
 
 # Get name
 name = repo.config['user.email']
+
+# Get project name
+remote = repo.branches['master'].upstream.remote_name
+url = repo.remotes[remote].url
 
