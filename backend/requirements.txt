@@ -1,2 +1,4 @@
 requests==2.22.0
 Django==2.2.7
+pygit2==0.28.2
+Click==7.0
