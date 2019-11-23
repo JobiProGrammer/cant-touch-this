@@ -1,7 +1,7 @@
 package data.model;
 
 public class User {
-    String email;
+    public String email;
 
     public User(String email) {
         this.email = email;
