@@ -59,6 +59,30 @@ function place_person_icons(files) {
 }
 
 // MAIN
+var style = document.createElement('style');
+style.innerHTML = `
+    .banner {
+        display: table-cell;
+        position: fixed;
+        top: 5%;
+        left: 0;
+        width: 100%;
+        height:10%;
+        text-align: center;
+        background-color: rgba(231,94,64,0.85);
+        cursor: pointer;
+        pointer-events: none;
+        z-index: 2
+    }
+    .banner_text {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: normal;
+        color: white;
+    }
+`;
+document.head.appendChild(style);
+
 let files = {
     ".gitignore": 1,
     "browser-plugin/manifest.json": 2,
@@ -71,10 +95,16 @@ if (!is_url_file()) {
     place_person_icons(files);
 } else if (get_curr_browser_dir() in files){
     // Display warning
+    let div = document.createElement("div");
+    let span = document.createElement("span");
+    div.className = "banner";
+    span.className = "banner_text";
+    document.body.prepend(div);
+    div.append(span);
     let key = get_curr_browser_dir();
     if (files[key] == 1) {
-        alert("This file is currently being edited by 1 other user.\nProceed with care!");
+        span.innerText = "This file is currently being edited by 1 other user.\nProceed with care!";
     } else {
-        alert("This file is currently being edited by " + files[get_curr_browser_dir()] + " other users.\nProceed with care!");
+        span.innerText = "This file is currently being edited by " + files[get_curr_browser_dir()] + " other users.\nProceed with care!";
     }
 }
