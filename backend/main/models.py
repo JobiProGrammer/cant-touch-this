@@ -43,22 +43,36 @@ class File(models.Model):
         return re_dict
 
     def create_change(self, change: List[int], user: settings.AUTH_USER_MODEL):
-        # u = settings.AUTH_USER_MODEL.objects.get(email=user_email)
-        c = Change(user=user, file=self)
+        if len(change) == 0:
+            # deletes change if empty
+            c, _ = Change.objects.get_or_create(user=user, file=self)
+            c.delete()
+
+            if len(self.changes.all()) == 0:
+                # delete file if no more changes exist
+                self.delete()
+                return {}
+            else:
+                return self.get_changes_dict()
+        c, _ = Change.objects.get_or_create(user=user, file=self)
+        c.lines.clear()
         # change should be a list of all lines
         for i in change:
             # check if we can find line i --> if not then create...
-            line = Line.objects.get_or_create(id=i)
+            line, _ = Line.objects.get_or_create(id=i)
+            # can be done with unpacking
             c.lines.add(line)
         c.save()
         return self.get_changes_dict()
 
-        # c.lines.add(change)
-        # c.save()
+    def get_num_user(self):
+        count = {}
+        for i in self.changes.all():
+            count[i.user.email] = 0
+        return len(count)
 
 
 class Line(models.Model):
-    pass
 
     def __str__(self):
         return str(self.id)
