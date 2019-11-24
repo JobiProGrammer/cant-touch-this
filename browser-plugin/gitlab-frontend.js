@@ -67,6 +67,26 @@ function get_editors(changes, max_explicit_len=2) {
     return editors.join("");
 }
 
+function format_namelist(namelist, max_explicit_len=2) {
+    var editors = [];
+    for (var i=0; i<max_explicit_len; i++) {
+        if (i >= namelist.length) {
+          break;
+        };
+        editors.push(namelist[i]);
+        if ((namelist.length <= max_explicit_len && i == namelist.length-2)
+        || (namelist.length > max_explicit_len && i == max_explicit_len-1)) {
+            editors.push(" and ");
+        } else if (i < Math.min(namelist.length-1, max_explicit_len)) {
+            editors.push(", ");
+        }
+    }
+    if (namelist.length > max_explicit_len) {
+        editors.push((namelist.length-max_explicit_len) + " other")
+    }
+    return editors.join("");
+}
+
 // Place person icons next to all files on the current page with the file names specified
 function place_person_icons(files) {
     let ffiles = filter_to_scope(files);
@@ -92,7 +112,7 @@ function place_person_icons(files) {
         // Hover Tooltip
         let hovertext = document.createElement("span");
         hovertext.className = "tooltiptext tooltip-top";
-        hovertext.innerText = ffiles[filename_texts[i].title];
+        hovertext.innerText = format_namelist(ffiles[filename_texts[i].title]);
         divr.className = "tooltip-container";
         filename_boxes[i].append(divr);
         divr.append(icon.cloneNode(), num, hovertext);
@@ -150,7 +170,7 @@ function refresh_files() {
     }).then(res => res.json()).then(data => {
         delete data.project;
         files = data;
-        console.log("Is URL file?:", is_url_file(), "Browser dir:", get_curr_browser_dir(), "Files:", files);
+        // console.log("Is URL file?:", is_url_file(), "Browser dir:", get_curr_browser_dir(), "Files:", files);
         if (is_url_file() && get_curr_browser_dir() in files) {
             // Get changes and update visuals
             refresh_changes(get_curr_browser_dir());
