@@ -40,13 +40,13 @@
 .tooltip-container .tooltiptext {
     visibility: hidden;
     position: absolute;
-    width: 120px;
-    background-color: #555;
-    color: #fff;
+    width: 250px;
+    background-color: rgba(85, 85, 85, 0.89);
+    color: #ffffffdc;
     text-align: center;
-    padding: 5px 0;
+    padding: 5px 5px;
     border-radius: 6px;
-    z-index: 1;
+    z-index: 10;
 }
 
 .tooltip-bottom {
@@ -68,7 +68,7 @@
 
 .tooltip-top {
     bottom: 125%;
-    left: 50%;  
+    left: -150%;  
     margin-left: -60px;
 }
 
@@ -86,4 +86,5 @@
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip-container:hover .tooltiptext {
     visibility: visible;
+    display: block;
 }
