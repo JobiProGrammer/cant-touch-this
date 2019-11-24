@@ -29,7 +29,8 @@ def main(path):
     repo = pygit2.Repository('.')
 
     # Get name
-    name = repo.config['user.email']
+    email = repo.config['user.email']
+    name = repo.config['user.name']
 
     # Get project name
     remote = repo.branches['master'].upstream.remote_name
@@ -71,7 +72,8 @@ def main(path):
             payload = {
                 'path': path,
                 'project': url,
-                'email': name,
+                'email': email,
+                'username': name,
                 'change': str(changes)
             }
             print(payload)
@@ -83,7 +85,8 @@ def main(path):
                 payload = {
                     'path': path,
                     'project': url,
-                    'email': name,
+                    'email': email,
+                    'username': name,
                     'change': '[]'
                 }
                 print(payload)
