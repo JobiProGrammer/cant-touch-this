@@ -96,8 +96,8 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
 
             highlightManager.addRangeHighlight(
                     editor,
-                    document.getLineStartOffset(c.lines[0].line),
-                    document.getLineStartOffset(c.lines[c.lines.length - 1].line + 1),
+                    document.getLineStartOffset(c.lines[0]),
+                    document.getLineStartOffset(c.lines[c.lines.length - 1] + 1),
                     newAttributes,
                     false,
                     null);
