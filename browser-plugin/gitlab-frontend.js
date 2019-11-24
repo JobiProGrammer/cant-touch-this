@@ -47,7 +47,7 @@ function get_editors(changes, max_explicit_len=2) {
         if (i >= changes.length) {
           break;
         };
-        editors.push(changes[i]["email"]);
+        editors.push(changes[i]["username"]);
         if ((changes.length <= max_explicit_len && i == changes.length-2)
         || (changes.length > max_explicit_len && i == max_explicit_len-1)) {
             editors.push(" and ");

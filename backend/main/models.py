@@ -39,7 +39,7 @@ class File(models.Model):
         re_dict = {"path": self.path, "project": self.project.name}
         ch = []
         for index, i in enumerate(user):
-            ch.append({"email": i, "lines": changes[index], "username": usern})
+            ch.append({"email": i, "lines": changes[index], "username": usern[index]})
 
         re_dict["changes"] = ch
         return re_dict
@@ -86,4 +86,4 @@ class Change(models.Model):
     lines = models.ManyToManyField(Line, blank=True, related_name="change")
 
     def __str__(self):
-        return str([i.id for i in self.lines.all()])
+        return self.file.path + " | " + self.user.username + " | " + str([i.id for i in self.lines.all()])
