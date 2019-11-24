@@ -7,6 +7,12 @@ import data.DataLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
 // TODO set to reloadable and handle changes
 @State(name = "Config", reloadable = false)
 public class ConfigLoaderComponent implements PersistentStateComponent<data.Config> {
@@ -39,6 +45,22 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
 
     @Override
     public void initializeComponent() {
-
+        String pythonPath = "/home/tobi/coding/HackaTUM19/cant-touch-this/client/dont_touch.py";
+        String pythonEnvPath = "/home/tobi/coding/HackaTUM19/cant-touch-this/backend/venv3.7/bin/python";
+        String topLevel = "/home/tobi/coding/HackaTUM19/cant-touch-this/";
+        Runtime rt = Runtime.getRuntime();
+        Runtime rt2 = Runtime.getRuntime();
+        try {
+            Process pr2 = rt2.exec(pythonEnvPath + " " + pythonPath + " --path " + topLevel);
+            Process pr = rt.exec("git rev-parse --show-toplevel");
+            String result = new BufferedReader(new InputStreamReader(pr.getInputStream()))
+                    .lines().collect(Collectors.joining("\n"));
+            System.out.println(result);
+            if(!result.equals("")){
+                topLevel = result;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
