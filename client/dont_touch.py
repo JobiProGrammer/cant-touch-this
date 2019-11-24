@@ -12,7 +12,7 @@ SERVER = "52.236.180.203"
 # Send to server
 server = 'http://{}:8080/api/change/'.format(SERVER)
 
-waitTime = 10
+waitTime = 1
 
 
 @click.command()

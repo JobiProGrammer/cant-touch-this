@@ -25,6 +25,12 @@
                 description="Says hello">
             <add-to-group group-id="HelpMenu" anchor="first"/>
         </action>
+        <action class="actions.ConfigAction"
+                id="canttouchthis.configure"
+                text="Can't Touch This"
+                description="Configure Can't Touch This">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
     </actions>
 
     <!-- Plugin's project components -->

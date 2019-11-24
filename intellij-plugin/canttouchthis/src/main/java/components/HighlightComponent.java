@@ -1,20 +1,25 @@
 package components;
 
 import com.intellij.codeInsight.highlighting.HighlightManager;
+import com.intellij.codeInsight.highlighting.HighlightManagerImpl;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.colors.EditorColors;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
+import com.intellij.openapi.editor.event.CaretEvent;
+import com.intellij.openapi.editor.event.CaretListener;
 import com.intellij.openapi.editor.event.EditorEventMulticaster;
 import com.intellij.openapi.editor.ex.EditorEventMulticasterEx;
 import com.intellij.openapi.editor.ex.FocusChangeListener;
 import com.intellij.openapi.editor.markup.EffectType;
+import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import data.Config;
 import data.DataLoader;
@@ -27,13 +32,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class HighlightComponent implements ProjectComponent, FocusChangeListener {
+public class HighlightComponent implements ProjectComponent, FocusChangeListener, CaretListener {
     private final static int UPDATE_INTERVAL = 2000;
 
     private Config config;
     private DataLoader dataLoader;
     private Set<Project> projects;
-    private long lastUpdate = 0;
+    private Editor currentEditor;
+    private long lastUpdate;
 
     public HighlightComponent(ConfigLoaderComponent configLoader) {
         this.config = configLoader.state;
@@ -48,6 +54,7 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
                 System.out.println("Registering for " + p.getName());
                 final EditorEventMulticaster multicaster = EditorFactory.getInstance().getEventMulticaster();
                 ((EditorEventMulticasterEx) multicaster).addFocusChangeListener(this, p);
+                multicaster.addCaretListener(this, p);
                 projects.add(p);
             }
         }
@@ -73,12 +80,10 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
 
     @Override
     public void focusGained(@NotNull Editor editor) {
-        if (System.currentTimeMillis() - lastUpdate > UPDATE_INTERVAL) {
-            // Reload
-            this.dataLoader.reload();
-        } else {
-            System.out.println("Too early to update");
-        }
+        System.out.println("Updating Highlights");
+
+        this.currentEditor = editor;
+        this.dataLoader.reload();
 
         // Use Data
         final Document document = editor.getDocument();
@@ -101,6 +106,13 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
         final TextAttributes textAttributes = EditorColorsManager.getInstance().getGlobalScheme().getAttributes(EditorColors.LIVE_TEMPLATE_ATTRIBUTES);
         textAttributes.setEffectType(EffectType.SEARCH_MATCH);
 
+        final RangeHighlighter[] highlighters =
+                ((HighlightManagerImpl) HighlightManager.getInstance(project)).getHighlighters(
+                        editor);
+        for (RangeHighlighter highlighter : highlighters) {
+            highlightManager.removeSegmentHighlighter(editor, highlighter);
+        }
+
         for (int i = 0; i < cttFileInformation.changes.length; ++i) {
             Change c = cttFileInformation.changes[i];
             if (!this.config.user.equals(c.email)) {
@@ -118,11 +130,19 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
             }
         }
 
-        lastUpdate = System.currentTimeMillis();
-
     }
 
     @Override
     public void focusLost(@NotNull Editor editor) {
+    }
+
+    @Override
+    public void caretPositionChanged(@NotNull CaretEvent event) {
+        if (this.currentEditor != null && System.currentTimeMillis() - this.lastUpdate > UPDATE_INTERVAL) {
+
+            this.focusGained(this.currentEditor);
+
+            this.lastUpdate = System.currentTimeMillis();
+        }
     }
 }
