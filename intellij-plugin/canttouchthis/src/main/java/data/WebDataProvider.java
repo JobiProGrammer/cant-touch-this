@@ -1,5 +1,7 @@
 package data;
 
+import com.google.gson.Gson;
+import data.model.Change;
 import data.model.File;
 import data.model.Project;
 
@@ -12,7 +14,7 @@ import java.util.Map;
 
 public class WebDataProvider implements DataProvider {
     private Config config;
-    private Project project;
+    private File[] files;
 
     public WebDataProvider(Config config) {
         this.config = config;
@@ -20,8 +22,8 @@ public class WebDataProvider implements DataProvider {
 
     @Override
     public File get(String file) {
-        if (project == null) return null;
-        for (File f : this.project.files) {
+        if (files == null) return null;
+        for (File f : this.files) {
             if (f.path.equals(file)) return f;
         }
         return null;
@@ -44,6 +46,10 @@ public class WebDataProvider implements DataProvider {
             return;
         } else {
             System.out.println("HTTP Result:\n\t" + result);
+
+            // Deserialization
+            Gson gson = new Gson();
+//            this.files = gson.fromJson(result.substring(1,result.length()-1), File[].class);
         }
     }
 
@@ -53,8 +59,6 @@ public class WebDataProvider implements DataProvider {
         URL url = new URL(urlIn);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(requestMethod);
-
-        System.out.println("RequestType: " + con.getRequestMethod());
 
         con.setDoOutput(true);
         DataOutputStream out = new DataOutputStream(con.getOutputStream());
