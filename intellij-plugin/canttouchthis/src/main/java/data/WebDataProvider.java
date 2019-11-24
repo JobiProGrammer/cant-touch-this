@@ -49,7 +49,7 @@ public class WebDataProvider implements DataProvider {
 
             // Deserialization
             Gson gson = new Gson();
-//            this.files = gson.fromJson(result.substring(1,result.length()-1), File[].class);
+            this.files = gson.fromJson(result, File[].class);
         }
     }
 

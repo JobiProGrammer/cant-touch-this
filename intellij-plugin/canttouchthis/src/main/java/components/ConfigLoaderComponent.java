@@ -47,19 +47,19 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
 
     @Override
     public void initializeComponent() {
-        String pythonPath = "/home/tobi/coding/HackaTUM19/cant-touch-this/client/dont_touch.py";
-        String pythonEnvPath = "/home/tobi/coding/HackaTUM19/cant-touch-this/backend/venv3.7/bin/python";
-        String topLevel = "/home/tobi/coding/HackaTUM19/cant-touch-this/";
+        String pythonPath = this.state.gitBasePath+"/client/dont_touch.py";
+        String pythonEnvPath = this.state.gitBasePath+"/backend/venv3.7/Scripts/python.exe";
         Runtime rt = Runtime.getRuntime();
         Runtime rt2 = Runtime.getRuntime();
         try {
-            Process pr2 = rt2.exec(pythonEnvPath + " " + pythonPath + " --path " + topLevel);
+            System.out.println(pythonEnvPath + " " + pythonPath + " --path " + this.state.gitBasePath);
+            Process pr2 = rt2.exec(pythonEnvPath + " " + pythonPath + " --path " + this.state.gitBasePath);
             Process pr = rt.exec("git rev-parse --show-toplevel");
             String result = new BufferedReader(new InputStreamReader(pr.getInputStream()))
                     .lines().collect(Collectors.joining("\n"));
             System.out.println(result);
             if(!result.equals("")){
-                topLevel = result;
+                this.state.gitBasePath = result;
             }
         } catch (IOException e) {
             e.printStackTrace();

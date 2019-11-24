@@ -26,10 +26,14 @@ import resources.Colors;
 import java.util.HashSet;
 import java.util.Set;
 
+
 public class HighlightComponent implements ProjectComponent, FocusChangeListener {
+    private final static int UPDATE_INTERVAL = 2000;
+
     private Config config;
     private DataLoader dataLoader;
     private Set<Project> projects;
+    private long lastUpdate = 0;
 
     public HighlightComponent(ConfigLoaderComponent configLoader) {
         this.config = configLoader.state;
@@ -69,11 +73,19 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
 
     @Override
     public void focusGained(@NotNull Editor editor) {
+        if (System.currentTimeMillis() - lastUpdate > UPDATE_INTERVAL) {
+            // Reload
+            this.dataLoader.reload();
+        } else {
+            System.out.println("Too early to update");
+        }
+
+        // Use Data
         final Document document = editor.getDocument();
         final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         String fileName = null;
         try {
-            fileName = file.getPath().substring(this.config.gitBasePath.length());
+            fileName = file.getPath().substring(this.config.gitBasePath.length() + 1);
         } catch (NullPointerException e) {
             e.printStackTrace();
             return;
@@ -91,22 +103,26 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
 
         for (int i = 0; i < cttFileInformation.changes.length; ++i) {
             Change c = cttFileInformation.changes[i];
-            TextAttributes newAttributes = textAttributes.clone();
-            newAttributes.setBackgroundColor(Colors.userColors[i % Colors.userColors.length]);
+            if (!this.config.user.equals(c.email)) {
+                TextAttributes newAttributes = textAttributes.clone();
+                newAttributes.setBackgroundColor(Colors.userColors[i % Colors.userColors.length]);
 
-            highlightManager.addRangeHighlight(
-                    editor,
-                    document.getLineStartOffset(c.lines[0]),
-                    document.getLineStartOffset(c.lines[c.lines.length - 1] + 1),
-                    newAttributes,
-                    false,
-                    null);
+                for (int line : c.lines)
+                    highlightManager.addRangeHighlight(
+                            editor,
+                            document.getLineStartOffset(line - 1),
+                            document.getLineEndOffset(line - 1) + 1,
+                            newAttributes,
+                            false,
+                            null);
+            }
         }
+
+        lastUpdate = System.currentTimeMillis();
 
     }
 
     @Override
     public void focusLost(@NotNull Editor editor) {
-        this.dataLoader.reload();
     }
 }
