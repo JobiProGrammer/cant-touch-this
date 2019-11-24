@@ -143,7 +143,15 @@ function place_warning_banner(changes) {
 
 // Place line highlights etc.
 function place_line_edits(changes) {
+    for (line of old_line_changes) {
+        let line_con = document.getElementById("LC" + line);
+        line_con.display = "block";
+        line_con.style.backgroundColor = "#ffffff";
+    }
+
     var unq_changes = [...new Set(changes.map(c => c["lines"]).flat())];
+    old_line_changes = [...unq_changes];
+    
     for (change of unq_changes) {
         let line_con = document.getElementById("LC" + change);
         line_con.display = "block";
@@ -234,5 +242,6 @@ var changes = [];
 var person_icon_ids = [];
 var old_person_icon_ids = [];
 var banner_placed = false;
+var old_line_changes = [];
 
 refresh_files();
