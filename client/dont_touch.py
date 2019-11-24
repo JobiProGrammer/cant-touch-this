@@ -30,7 +30,7 @@ def main(path):
 
     # Get name
     email = repo.config['user.email']
-    name = repo.config['user.name']
+    name = repo.config['user.name'].replace(' ', '_')
 
     # Get project name
     remote = repo.branches['master'].upstream.remote_name
