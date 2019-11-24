@@ -33,12 +33,15 @@ function filter_to_scope (files) {
             cut_key = key.substring(prefix.length).split("/").filter(s => s !== "")[0];
             if (cut_key in filtered_dict) {
                 filtered_dict[cut_key].push(files[key]);
-                // Remove duplicates
-                filtered_dict[cut_key] = [...new Set(filtered_dict[cut_key])];
             } else {
                 filtered_dict[cut_key] = files[key];
             }
         }
+    }
+    for (key of Object.keys(filtered_dict)) {
+        // Remove duplicate users from all keys
+        let unique = [...new Set(filtered_dict[key].flat())];
+        filtered_dict[key] = unique;
     }
     return filtered_dict;
 }
@@ -89,7 +92,7 @@ function place_person_icons(files) {
         // Hover Tooltip
         let hovertext = document.createElement("span");
         hovertext.className = "tooltiptext tooltip-top";
-        hovertext.innerText = "Editor names, files, ...";
+        hovertext.innerText = ffiles[filename_texts[i].title];
         divr.className = "tooltip-container";
         filename_boxes[i].append(divr);
         divr.append(icon.cloneNode(), num, hovertext);
