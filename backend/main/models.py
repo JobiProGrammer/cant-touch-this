@@ -27,17 +27,19 @@ class File(models.Model):
         changes = self.changes.all()
         ch = []
         us = []
+        usn = []
         for i in changes:
             ch.append([j.id for j in i.lines.all()])
             us.append(i.user.email)
-        return ch, us
+            usn.append(i.user.username)
+        return ch, us, usn
 
     def get_changes_dict(self) -> Dict:
-        changes, user = self.get_changes()
+        changes, user, usern = self.get_changes()
         re_dict = {"path": self.path, "project": self.project.name}
         ch = []
         for index, i in enumerate(user):
-            ch.append({"email": i, "lines": changes[index]})
+            ch.append({"email": i, "lines": changes[index], "username": usern})
 
         re_dict["changes"] = ch
         return re_dict

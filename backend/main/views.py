@@ -74,7 +74,8 @@ class ChangeView(View):
             f, _ = File.objects.get_or_create(path=request.POST["path"], project=p)
             # f = get_object_or_404(File, path=request.POST["path"], project=request.POST["project"])
 
-            u, _ = get_user_model().objects.get_or_create(email=request.POST["email"], username=request.POST["email"])
+            username = request.POST["username"] if "username" in request.POST else request.POST["email"]
+            u, _ = get_user_model().objects.get_or_create(email=request.POST["email"], username=username)
             change_list = json.loads(request.POST["change"])
             print(request.POST["change"])
             print(change_list)
