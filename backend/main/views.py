@@ -77,8 +77,6 @@ class ChangeView(View):
             username = request.POST["username"] if "username" in request.POST else request.POST["email"]
             u, _ = get_user_model().objects.get_or_create(email=request.POST["email"], username=username)
             change_list = json.loads(request.POST["change"])
-            print(request.POST["change"])
-            print(change_list)
 
             re = f.create_change(change_list, u)
             return JsonResponse(re, safe=False)
