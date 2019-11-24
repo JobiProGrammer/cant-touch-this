@@ -40,7 +40,8 @@
 .tooltip-container .tooltiptext {
     visibility: hidden;
     position: absolute;
-    width: 250px;
+    width: auto;
+    max-width: 250px;
     background-color: rgba(85, 85, 85, 0.89);
     color: #ffffffdc;
     text-align: center;
@@ -68,7 +69,7 @@
 
 .tooltip-top {
     bottom: 125%;
-    left: -150%;  
+    left: 50%;  
     margin-left: -60px;
 }
 
