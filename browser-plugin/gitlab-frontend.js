@@ -75,16 +75,21 @@ function place_person_icons(files) {
     // Arrange and insert elements
     for (i=0; i<filename_boxes.length; i++) {
         // Number of people working
-        var num = document.createElement("span");
+        let num = document.createElement("span");
         num.className = "badge badge-pill count issue-counter";
-        num.innerHTML = ffiles[filename_texts[i].title];
+        num.innerText = ffiles[filename_texts[i].title];
         // Person icon
-        var divr = document.createElement("div");
+        let divr = document.createElement("div");
         divr.id = uuidv4();
         person_icon_ids.push(divr.id);
         divr.style = "float:right; display: inline-block";
+        // Hover Tooltip
+        let hovertext = document.createElement("span");
+        hovertext.className = "tooltiptext tooltip-top";
+        hovertext.innerText = "Editor names, files, ...";
+        divr.className = "tooltip-container";
         filename_boxes[i].append(divr);
-        divr.append(icon.cloneNode(), num);
+        divr.append(icon.cloneNode(), num, hovertext);
     }
 }
 
@@ -152,7 +157,7 @@ function refresh_files() {
     }
 
     // Schedule function again after timeout
-    setTimeout(refresh_files, 200);
+    setTimeout(refresh_files, 500);
 }
 
 // Poll for changes within a file
@@ -187,11 +192,6 @@ function update_frontend_dir(files) {
     person_icon_ids = [];
     remove_person_icons();
     place_person_icons(files);
-}
-
-// Refresh the view of the file content viewer
-function update_frontend_file(changes) {
-
 }
 
 // ========== MAIN ==========
