@@ -9,11 +9,6 @@ import json
 
 SERVER = "52.236.180.203"
 
-# Initialize repo
-
-
-
-
 # Send to server
 server = 'http://{}:8080/api/change/'.format(SERVER)
 
@@ -30,6 +25,7 @@ def main(path):
         os.chdir(path)
         print("new path: " + path)
 
+    # Initialize repo
     repo = pygit2.Repository('.')
 
     # Get name
