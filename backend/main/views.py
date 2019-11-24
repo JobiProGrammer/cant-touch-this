@@ -83,9 +83,9 @@ class ChangeView(View):
             return JsonResponse(re, safe=False)
 
         elif "project" in request.POST:
-            p = get_object_or_404(Project, name=request.GET["project"])
-            if "path" in request.GET:
-                f = get_object_or_404(File, path=request.GET["path"], project=p)
+            p = get_object_or_404(Project, name=request.POST["project"])
+            if "path" in request.POST:
+                f = get_object_or_404(File, path=request.POST["path"], project=p)
                 return JsonResponse(f.get_changes_dict(), safe=False)
             re = []
             for i in File.objects.filter(project=p).all():
