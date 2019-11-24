@@ -47,8 +47,8 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
 
     @Override
     public void initializeComponent() {
-        String pythonPath = this.state.gitBasePath+"/client/dont_touch.py";
-        String pythonEnvPath = this.state.gitBasePath+"/backend/venv3.7/Scripts/python.exe";
+        /*String pythonPath = this.state.gitBasePath+"/client/dont_touch.py";
+        String pythonEnvPath = this.state.gitBasePath+"/backend/venv3.7/bin/python";
         Runtime rt = Runtime.getRuntime();
         Runtime rt2 = Runtime.getRuntime();
         try {
@@ -62,6 +62,6 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
