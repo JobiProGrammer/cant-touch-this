@@ -16,4 +16,9 @@ public class TestDataProvider implements DataProvider {
                         new Change(new Line[]{new Line(13), new Line(13)}, new User("3@test.com"))
                 });
     }
+
+    @Override
+    public void loadAll() {
+
+    }
 }
