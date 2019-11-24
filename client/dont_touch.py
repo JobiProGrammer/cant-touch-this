@@ -1,4 +1,4 @@
-#! /usr/bin/pythonasoenthuasoeunhe
+#! /usr/bin/python
 
 import pygit2
 import requests
@@ -10,15 +10,9 @@ import json
 SERVER = "52.236.180.203"
 
 # Initialize repo
-repo = pygit2.Repository('.')
 
-# Get name
-name = repo.config['user.email']
 
-# Get project name
-remote = repo.branches['master'].upstream.remote_name
-url = repo.remotes[remote].url
-remote_head = repo.branches.remote[remote + '/HEAD']
+
 
 # Send to server
 server = 'http://{}:8080/api/change/'.format(SERVER)
@@ -34,6 +28,18 @@ def main(path):
 
     if path != None:
         os.chdir(path)
+        print("new path: " + path)
+
+    repo = pygit2.Repository('.')
+
+    # Get name
+    name = repo.config['user.email']
+
+    # Get project name
+    remote = repo.branches['master'].upstream.remote_name
+    url = repo.remotes[remote].url
+    remote_head = repo.branches.remote[remote + '/master']
+
 
     # Stuff for diffs
     while True:
