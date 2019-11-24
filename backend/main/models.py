@@ -74,7 +74,7 @@ class File(models.Model):
         return len(count)
 
     def get_all_user(self):
-        all_users = Set()
+        all_users = set()
         for i in self.changes.all():
             all_user.add(i.user.username)
         return list(all_users)
