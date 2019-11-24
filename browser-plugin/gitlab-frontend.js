@@ -29,9 +29,12 @@ function filter_to_scope (files) {
     var filtered_dict = {};
     for (key of Object.keys(files)) {
         if (key.startsWith(prefix)) {
+            // Cut key is the shortened relative filename as shown on GitLab
             cut_key = key.substring(prefix.length).split("/").filter(s => s !== "")[0];
             if (cut_key in filtered_dict) {
-                filtered_dict[cut_key] += files[key];
+                filtered_dict[cut_key].push(files[key]);
+                // Remove duplicates
+                filtered_dict[cut_key] = [...new Set(filtered_dict[cut_key])];
             } else {
                 filtered_dict[cut_key] = files[key];
             }
@@ -77,7 +80,7 @@ function place_person_icons(files) {
         // Number of people working
         let num = document.createElement("span");
         num.className = "badge badge-pill count issue-counter";
-        num.innerText = ffiles[filename_texts[i].title];
+        num.innerText = ffiles[filename_texts[i].title].length;
         // Person icon
         let divr = document.createElement("div");
         divr.id = uuidv4();
