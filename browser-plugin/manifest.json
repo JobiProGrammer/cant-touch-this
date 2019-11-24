@@ -7,7 +7,7 @@
     "description": "Can't Touch This Plugin for Gitlab",
 
     "icons": {
-        "48": "icons/border-48.png"
+        "48": "icons/icon.png"
     },
 
     "permissions": ["http://localhost/*", "http://52.236.180.203/*"],
