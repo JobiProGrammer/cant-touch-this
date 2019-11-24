@@ -81,6 +81,19 @@ class ChangeView(View):
 
             re = f.create_change(change_list, u)
             return JsonResponse(re, safe=False)
+
+        elif "project" in request.POST:
+            p = get_object_or_404(Project, name=request.POST["project"])
+            if "path" in request.POST:
+                f = get_object_or_404(File, path=request.POST["path"], project=p)
+                return JsonResponse(f.get_changes_dict(), safe=False)
+            re = []
+            for i in File.objects.filter(project=p).all():
+                t = i.get_changes_dict()
+                t["num_user"] = i.get_num_user()
+                re.append(t)
+            return JsonResponse(re, safe=False)
+
         else:
             return HttpResponseBadRequest(json.dumps({"status": "ERROR: BAD REQUEST, Missing parameters"}))
 
