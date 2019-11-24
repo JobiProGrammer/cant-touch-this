@@ -52,7 +52,6 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
         Runtime rt = Runtime.getRuntime();
         Runtime rt2 = Runtime.getRuntime();
         try {
-            System.out.println(pythonEnvPath + " " + pythonPath + " --path " + this.state.gitBasePath);
             Process pr2 = rt2.exec(pythonEnvPath + " " + pythonPath + " --path " + this.state.gitBasePath);
             Process pr = rt.exec("git rev-parse --show-toplevel");
             String result = new BufferedReader(new InputStreamReader(pr.getInputStream()))
