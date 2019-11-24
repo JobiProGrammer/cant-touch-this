@@ -86,4 +86,4 @@ class Change(models.Model):
     lines = models.ManyToManyField(Line, blank=True, related_name="change")
 
     def __str__(self):
-        return str([i.id for i in self.lines.all()])
+        return self.file.path + " : " + str([i.id for i in self.lines.all()])
