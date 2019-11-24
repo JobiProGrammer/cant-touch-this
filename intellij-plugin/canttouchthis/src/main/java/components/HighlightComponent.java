@@ -71,10 +71,9 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
     public void focusGained(@NotNull Editor editor) {
         final Document document = editor.getDocument();
         final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-
         String fileName = null;
         try {
-            fileName = file.getPath().substring(editor.getProject().getBasePath().length());
+            fileName = file.getPath().substring(this.config.gitBasePath.length());
         } catch (NullPointerException e) {
             e.printStackTrace();
             return;
@@ -108,6 +107,6 @@ public class HighlightComponent implements ProjectComponent, FocusChangeListener
 
     @Override
     public void focusLost(@NotNull Editor editor) {
-
+        this.dataLoader.reload();
     }
 }

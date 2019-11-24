@@ -12,10 +12,14 @@ public class DataLoader {
     }
 
     private boolean isOnline() {
-        return false;
+        return true;
     }
 
-    public File getFile(String file){
+    public void reload() {
+        provider.loadAll();
+    }
+
+    public File getFile(String file) {
         return provider.get(file);
     }
 }

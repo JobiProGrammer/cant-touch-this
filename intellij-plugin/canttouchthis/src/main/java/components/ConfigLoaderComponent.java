@@ -26,7 +26,7 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
     public void loadState(@NotNull Config state) {
         System.out.println("Config loaded with values: " + state.user + ", " + state.host);
         this.state = state;
-        this.dataLoader= new DataLoader(state);
+        this.dataLoader = new DataLoader(state);
     }
 
     @Override
@@ -35,6 +35,8 @@ public class ConfigLoaderComponent implements PersistentStateComponent<data.Conf
         this.state = new Config();
         this.state.user = "";
         this.state.host = "";
+        this.state.projectName = "";
+        this.state.gitBasePath = "";
     }
 
     @Override

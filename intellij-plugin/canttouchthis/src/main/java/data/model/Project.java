@@ -1,10 +1,10 @@
 package data.model;
 
 public class Project {
-    public File[] file;
+    public File[] files;
 
-    public Project(File[] file) {
-        this.file = file;
+    public Project(File[] files) {
+        this.files = files;
     }
 
     public Project() {
