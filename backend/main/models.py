@@ -39,7 +39,7 @@ class File(models.Model):
         re_dict = {"path": self.path, "project": self.project.name}
         ch = []
         for index, i in enumerate(user):
-            ch.append({"email": i, "lines": changes[index], "username": usern})
+            ch.append({"email": i, "lines": changes[index], "username": usern[index]})
 
         re_dict["changes"] = ch
         return re_dict
