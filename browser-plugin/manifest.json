@@ -17,7 +17,8 @@
     "content_scripts": [
         {
             "matches": ["*://gitlab.com/*", "*://gitlab.lrz.de/*"],
-            "js": ["gitlab-frontend.js"]
+            "js": ["gitlab-frontend.js"],
+            "run_at": "document_end"
         }
     ]
 
