@@ -106,6 +106,8 @@ function place_warning_banner(changes) {
     div.append(span);
     let key = get_curr_browser_dir();
     span.innerText = "This file is currently being edited by " + get_editors(changes) + ".\nProceed with care!";
+    console.log("Banner placed.");
+    banner_placed = true;
 }
 
 // Place line highlights etc.
@@ -137,13 +139,46 @@ function refresh_files() {
     }).then(res => res.json()).then(data => {
         delete data.project;
         files = data;
-        // console.log("GET result:", files);
+        console.log("Is URL file?:", is_url_file(), "Browser dir:", get_curr_browser_dir(), "Files:", files);
+        if (is_url_file() && get_curr_browser_dir() in files) {
+            // Get changes and update visuals
+            refresh_changes(get_curr_browser_dir());
+        }
     })
     .catch(err => console.log("Fetch error: ", err));
-    update_frontend_dir(files);
+
+    if (!is_url_file()) {
+        update_frontend_dir(files);
+    }
 
     // Schedule function again after timeout
-    setTimeout(refresh_files, 500);
+    setTimeout(refresh_files, 200);
+}
+
+// Poll for changes within a file
+function refresh_changes(filename) {
+    // Get list of changes within file
+    var url = new URL("http://52.236.180.203:8080/api/change/"),
+        params = {
+            "project": "git@gitlab.lrz.de:aDogCalledSpot/cant-touch-this.git",
+            "path": filename
+        }
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+    fetch(url).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            return Promise.resolve(res);
+        } else {
+            return Promise.reject(new Error(res.statusText));
+        }
+    }).then(res => res.json()).then(changes => {
+        changes = changes.changes;
+        if (!banner_placed) {
+            place_warning_banner(changes);
+        }
+        place_line_edits(changes);
+    })
+    .catch(err => console.log("Fetch error: ", err));
 }
 
 // Refresh the view of the directory explorer
@@ -172,12 +207,6 @@ var files = {};
 var changes = [];
 var person_icon_ids = [];
 var old_person_icon_ids = [];
+var banner_placed = false;
 
-if (!is_url_file()) {
-    refresh_files();
-} else if (get_curr_browser_dir() in files){
-    // Highlight lines
-    setTimeout(place_line_edits, 250, changes);
-    // Display warning
-    place_warning_banner(changes);
-}
+refresh_files();
