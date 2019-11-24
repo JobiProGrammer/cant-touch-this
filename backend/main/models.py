@@ -73,6 +73,12 @@ class File(models.Model):
             count[i.user.email] = 0
         return len(count)
 
+    def get_all_user(self):
+        all_users = Set()
+        for i in self.changes.all():
+            all_user.add(i.user.username)
+        return list(all_users)
+
 
 class Line(models.Model):
 

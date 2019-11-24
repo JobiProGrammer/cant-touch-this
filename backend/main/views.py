@@ -20,7 +20,7 @@ class FileView(View):
             if "dict" in request.GET:
                 re_dict = {"project": p.name}
                 for i in project_files:
-                    re_dict[i.path] = i.get_num_user()
+                    re_dict[i.path] = i.get_all_user()
                 return JsonResponse(re_dict, safe=False)
 
             re_list = []
